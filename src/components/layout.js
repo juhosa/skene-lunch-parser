@@ -38,7 +38,11 @@ const Layout = ({ children }) => (
           <footer>
             © {new Date().getFullYear()}, duunaillu 🌭
             {` `}
-            <a target="_blank" href="https://github.com/juhosa">
+            <a
+              target="_blank"
+              rel="noopener noreferrer"
+              href="https://github.com/juhosa"
+            >
               Juho
             </a>
           </footer>

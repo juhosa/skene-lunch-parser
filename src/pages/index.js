@@ -9,6 +9,7 @@ import moment from "moment"
 
 const IndexPage = () => {
   const [ruokat, setRuokat] = useState([])
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     btnClick()
@@ -45,6 +46,7 @@ const IndexPage = () => {
             lol.push(d)
           }
           setRuokat([...ruokat, lol])
+          setLoading(false)
         })
       })
       .catch(e => {
@@ -54,8 +56,8 @@ const IndexPage = () => {
   return (
     <Layout>
       <SEO title="Home" />
-      <button onClick={btnClick}>Hae ruoat</button>
-      {ruokat.length > 0 &&
+      {loading && <h2>ladataan...</h2>}
+      {!loading &&
         ruokat[0].map(r => {
           return <Food name={r.name} osat={r.osat} key={r.name} />
         })}
