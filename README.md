@@ -1,4 +1,4 @@
-<!-- AUTO-GENERATED-CONTENT:START (STARTER) -->
+[![Netlify Status](https://api.netlify.com/api/v1/badges/10cbf9bd-3d5c-489e-a583-0549d01eaf8c/deploy-status)](https://app.netlify.com/sites/skenelounas/deploys)
 # Skene lunch parser
 
 Näyttää Skenen päivän lounaslistan ilman muita turhuuksia.
