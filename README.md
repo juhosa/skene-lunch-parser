@@ -10,7 +10,7 @@ Paitsi jos ei tee, niin korjaa ihmeessä ja laita PR :)
 ## Kehittäminen
  ```
  yarn
- gasby develop
+ gatsby develop
 ```
 
 ## Contribution
