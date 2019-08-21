@@ -41,7 +41,7 @@ const Layout = ({ children }) => (
             <a
               target="_blank"
               rel="noopener noreferrer"
-              href="https://github.com/juhosa"
+              href="https://github.com/juhosa/skene-lunch-parser"
             >
               Juho
             </a>

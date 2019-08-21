@@ -1,11 +1,12 @@
 module.exports = {
   siteMetadata: {
-    title: `Skenen ruoka tänään`,
-    description: `Hakee SAMKin kampusravintola Skenen ruokalistan vähemmällä verkkoliikenteellä mitä niiden omat sivut.`,
+    title: `Skenen/Kanalin ruoka tänään`,
+    description: `Hakee SAMKin kampusravintola Skenen (tai Kanalin) ruokalistan vähemmällä verkkoliikenteellä mitä niiden omat sivut.`,
     author: `@juhosa`,
   },
   plugins: [
     `gatsby-plugin-react-helmet`,
+    `gatsby-plugin-styled-components`,
     {
       resolve: `gatsby-source-filesystem`,
       options: {
