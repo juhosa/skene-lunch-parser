@@ -29,9 +29,11 @@ const IndexPage = () => {
 
   const loadFood = kitchenid => {
     setLoading(true)
+    setRuokat([])
     setRestaurant(kitchenid === 46 ? "Skene" : "Kanali")
     let week = moment().week()
     let day = moment().day()
+    // console.log({ kitchenid })
     // console.log({ week }, { day })
     // console.log("painettu")
     // Porin Skenen kitchenid on 46
@@ -66,7 +68,10 @@ const IndexPage = () => {
             setRuokat([])
             setLoading(false)
           } else {
-            setRuokat([...ruokat, lol])
+            // console.log({ lol })
+            // console.log({ ruokat })
+            // setRuokat([...ruokat, lol])
+            setRuokat([lol])
             setMsg("")
             setLoading(false)
           }
