@@ -17,6 +17,8 @@ const Button = styled.button`
   padding-right: 15px;
 `
 
+const STORAGE_KEY = "skeneparser-preferred-kitchenid"
+
 const IndexPage = () => {
   const [ruokat, setRuokat] = useState([])
   const [loading, setLoading] = useState(true)
@@ -24,10 +26,16 @@ const IndexPage = () => {
   const [restaurant, setRestaurant] = useState()
 
   useEffect(() => {
-    loadFood(46)
+    // Check if preferred (the last searched) kitchenid is found on local storage
+    // if not, default to 46 (skene)
+    let kitchenid = localStorage.getItem(STORAGE_KEY)
+    // the `+kitchenid` casts the string in to an int
+    kitchenid = kitchenid !== null ? +kitchenid : 46
+    loadFood(kitchenid)
   }, [])
 
   const loadFood = kitchenid => {
+    localStorage.setItem(STORAGE_KEY, kitchenid)
     setLoading(true)
     setRuokat([])
     setRestaurant(kitchenid === 46 ? "Skene" : "Kanali")
