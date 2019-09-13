@@ -45,6 +45,16 @@ const Layout = ({ children }) => (
             >
               Juho
             </a>
+            {` `}
+            ja
+            {` `}
+            <a
+              target="_blank"
+              rel="noopener noreferrer"
+              href="https://github.com/juhosa/skene-lunch-parser/graphs/contributors"
+            >
+              kumppanit
+            </a>
           </footer>
         </div>
       </>
