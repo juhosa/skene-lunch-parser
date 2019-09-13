@@ -6,6 +6,7 @@ import SEO from "../components/seo"
 import Food from "../components/Food"
 
 import moment from "moment"
+import "moment/locale/fi"
 
 import styled from "styled-components"
 
@@ -19,11 +20,15 @@ const Button = styled.button`
 
 const STORAGE_KEY = "skeneparser-preferred-kitchenid"
 
+moment.locale("fi")
+
 const IndexPage = () => {
   const [ruokat, setRuokat] = useState([])
   const [loading, setLoading] = useState(true)
   const [msg, setMsg] = useState("")
   const [restaurant, setRestaurant] = useState()
+
+  let menuDate
 
   useEffect(() => {
     // Check if preferred (the last searched) kitchenid is found on local storage
@@ -52,6 +57,7 @@ const IndexPage = () => {
       .then(r => {
         r.json().then(j => {
           let parsed = JSON.parse(j["d"])
+          menuDate = parsed.MenuDateISO
           let itemit = parsed["MealOptions"].map(x => x["MenuItems"])
           let lol = []
           for (let ite of itemit) {
@@ -96,7 +102,11 @@ const IndexPage = () => {
       <Button onClick={() => loadFood(46)}>Lataa Skenen ruoka</Button>
       {loading && <h2>ladataan...</h2>}
       {msg !== "" && <h2>{msg}</h2>}
-      {!loading && ruokat.length > 0 && <h2>{restaurant}</h2>}
+      {!loading && ruokat.length > 0 && (
+        <h2>
+          {restaurant} - {moment(menuDate).format("dddd D.M.")}
+        </h2>
+      )}
       {!loading &&
         ruokat.length > 0 &&
         ruokat[0].map(r => {
