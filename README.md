@@ -16,7 +16,7 @@ Paitsi jos ei tee, niin korjaa ihmeessä ja laita PR :)
 ## Contribution
 Jos joku asia kaipaa mielestäsi muutosta; forkkaa, koodaa ja tee PR.
 
-Pidä kuitenkin mielessä, että sivun on tarkoitus olla yksin kertainen ja nopea.
+Pidä kuitenkin mielessä, että sivun on tarkoitus olla yksinkertainen ja nopea.
 
 ## Lisenssi / License
 MIT
