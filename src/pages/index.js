@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react"
+import { useStaticQuery, graphql } from "gatsby"
 
 import Layout from "../components/layout"
 import SEO from "../components/seo"
@@ -23,12 +24,28 @@ const STORAGE_KEY = "skeneparser-preferred-kitchenid"
 moment.locale("fi")
 
 const IndexPage = () => {
+  const data = useStaticQuery(graphql`
+    query MyQuery {
+      allJuvenesLunch {
+        nodes {
+          restaurantId
+          id
+          KitchenName
+          MealOptions {
+            MenuItems {
+              Name
+            }
+          }
+          MenuDateISO
+        }
+      }
+    }
+  `)
+
   const [ruokat, setRuokat] = useState([])
-  const [loading, setLoading] = useState(true)
   const [msg, setMsg] = useState("")
   const [restaurant, setRestaurant] = useState()
-
-  let menuDate
+  const [menuDate, setMenuDate] = useState()
 
   useEffect(() => {
     // Check if preferred (the last searched) kitchenid is found on local storage
@@ -41,76 +58,49 @@ const IndexPage = () => {
 
   const loadFood = kitchenid => {
     localStorage.setItem(STORAGE_KEY, kitchenid)
-    setLoading(true)
     setRuokat([])
+    setMsg("")
+    let food = null
+    for (let res of data.allJuvenesLunch.nodes) {
+      if (res.restaurantId === kitchenid) {
+        food = res.MealOptions
+        setMenuDate(res.MenuDateISO)
+        break
+      }
+    }
+
+    if (food === null || food[0].MenuItems.length === 0) {
+      setMsg(`${kitchenid === 46 ? "Skene" : "Kanali"} ei ruokatietoja!`)
+      return
+    }
+
+    let tmpRuokat = []
+
+    for (let f of food) {
+      let d = { name: "", osat: [] }
+      d.name = f.MenuItems[0].Name
+      d.osat = f.MenuItems.slice(1).map(x => x.Name)
+      tmpRuokat.push(d)
+    }
     setRestaurant(kitchenid === 46 ? "Skene" : "Kanali")
-    let week = moment().week()
-    let day = moment().day()
-    // console.log({ kitchenid })
-    // console.log({ week }, { day })
-    // console.log("painettu")
-    // Porin Skenen kitchenid on 46
-    // Rauman Kanalin kitchenid on 47
-    fetch(
-      `https://www.juvenes.fi/DesktopModules/Talents.LunchMenu/LunchMenuServices.asmx/GetMenuByWeekday?KitchenId=${kitchenid}&MenuTypeId=60&Week=${week}&Weekday=${day}&lang=%27fi%27&format=json`
-    )
-      .then(r => {
-        r.json().then(j => {
-          let parsed = JSON.parse(j["d"])
-          menuDate = parsed.MenuDateISO
-          let itemit = parsed["MealOptions"].map(x => x["MenuItems"])
-          let lol = []
-          for (let ite of itemit) {
-            let d = { name: "", osat: [] }
-            let nimi_saatu = false
-            for (let kte of ite) {
-              let name = kte["Name"]
-              if (name === "") {
-                continue
-              }
-              if (!nimi_saatu) {
-                d.name = name
-                nimi_saatu = true
-              } else {
-                d.osat.push(name)
-              }
-            }
-            lol.push(d)
-          }
-          if (lol.length === 0) {
-            setMsg(`${kitchenid === 46 ? "Skene" : "Kanali"} ei ruokatietoja!`)
-            setRuokat([])
-            setLoading(false)
-          } else {
-            // console.log({ lol })
-            // console.log({ ruokat })
-            // setRuokat([...ruokat, lol])
-            setRuokat([lol])
-            setMsg("")
-            setLoading(false)
-          }
-        })
-      })
-      .catch(e => {
-        console.log(e)
-      })
+
+    setRuokat(tmpRuokat)
   }
+
   return (
     <Layout>
       <SEO title="Home" />
       <Button onClick={() => loadFood(47)}>Lataa Kanalin ruoka</Button>
       <Button onClick={() => loadFood(46)}>Lataa Skenen ruoka</Button>
-      {loading && <h2>ladataan...</h2>}
       {msg !== "" && <h2>{msg}</h2>}
-      {!loading && ruokat.length > 0 && (
+      {ruokat.length > 0 && (
         <h2>
           {restaurant} - {moment(menuDate).format("dddd D.M.")}
         </h2>
       )}
-      {!loading &&
-        ruokat.length > 0 &&
-        ruokat[0].map(r => {
-          return <Food name={r.name} osat={r.osat} key={r.name} />
+      {ruokat.length > 0 &&
+        ruokat.map((r, i) => {
+          return <Food name={r.name} osat={r.osat} key={r.name + "_" + i} />
         })}
     </Layout>
   )

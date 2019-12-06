@@ -5,9 +5,9 @@ const Food = props => {
     <>
       <h3>Ruoka: {props.name}</h3>
       <ul>
-        {props.osat.map(o => {
+        {props.osat.map((o, i) => {
           return (
-            <li style={{ listStyle: "none" }} key={o}>
+            <li style={{ listStyle: "none" }} key={o + "_" + i}>
               {o}
             </li>
           )
